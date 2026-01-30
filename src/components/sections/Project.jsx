@@ -21,32 +21,34 @@ export const Projects = () => {
       title: "Ecommerce-LaptopShop API",
       description:
         "Backend API for E-commerce Laptop Shop using Clean Architecture, CQRS pattern, MediatR, and Repository Pattern for scalable and maintainable code.",
-      technologies: ["C#", ".NET", "SQL Server", "Docker", "Swagger"],
+      technologies: ["C#", ".NET", "SQL Server", "Docker", "CQRS", "Repository", "MediatR"],
       githubLink: "https://github.com/minhnhatluongg/E-LaptopShop",
       // liveLink: "https://demo-link.com" // Uncomment nếu có live demo
     },
     {
-      title: "Portfolio Website",
+      title: "API ERP System",
       description:
-        "Personal portfolio website built with React and Tailwind CSS. Features smooth animations, responsive design, and modern UI components.",
-      technologies: ["React", "Tailwind CSS", "Vite", "JavaScript"],
-      githubLink: "https://github.com/yourusername/portfolio",
-      liveLink: "https://yourportfolio.com",
+        "The Enterprise Resource Planning (ERP) system is built on Clean Architecture. The API focuses on high performance, managing digital signature processes, and integrating consistent data across departments."
+      ,
+      technologies: ["C#", ".NET", "Docker", "MySQL", "Entity Framework"],
+      githubLink: "https://github.com/minhnhatluongg/api-erp-reCode",
+      liveLink: "#",
     },
     {
-      title: "Task Management App",
+      title: "Tool Sale",
       description:
-        "Full-stack task management application with user authentication, real-time updates, and drag-and-drop functionality.",
-      technologies: ["React", "Node.js", "MongoDB", "Express"],
-      githubLink: "https://github.com/yourusername/task-manager",
+        "A comprehensive sales management solution that supports invoice processing and real-time data synchronization. The system features optimized user interface (UI/UX) with React and Tailwind CSS, accelerating sales transaction processing.",
+      technologies: ["React", "Tailwind", "React Hot Toast"],
+      githubLink: "https://github.com/minhnhatluongg/demo-tool-sale",
+      liveLink : "https://winsale.wininvoice.vn/login",
     },
     {
-      title: "Weather Dashboard",
+      title: "90 Coffe Shop",
       description:
-        "Weather forecast dashboard that displays current weather and 7-day forecast using OpenWeather API with beautiful data visualizations.",
-      technologies: ["React", "Chart.js", "OpenWeather API", "CSS"],
-      githubLink: "https://github.com/yourusername/weather-dashboard",
-      liveLink: "https://weather-app-demo.com",
+        "Practice to code with Reactjs",
+      technologies: ["React", "Chart.js"],
+      githubLink: "https://github.com/minhnhatluongg/90-store-coffe",
+      liveLink: "https://90-store-coffe.vercel.app/",
     },
   ];
 
