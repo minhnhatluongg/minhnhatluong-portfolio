@@ -1,8 +1,25 @@
 @import "tailwindcss";
 
+/* ====================================================================
+ * LENIS SMOOTH SCROLL
+ * ====================================================================
+ *
+ * Lenis THAY THE native scroll bang custom scroll.
+ * Can bo html scroll-behavior: smooth vi Lenis tu xu ly.
+ * Giu scroll-padding-top cho anchor links (Lenis ton trong no).
+ *
+ * html.lenis, html.lenis body:
+ *   - height: auto -> de Lenis tinh toan chieu cao dung
+ *   - Lenis tu dong them class "lenis" va "lenis-smooth" vao html
+ * ==================================================================== */
+
 html {
-  scroll-behavior: smooth; /* Smooth scroll cho toàn bộ page */
   scroll-padding-top: 80px; /* Offset cho fixed navbar */
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
 html,
@@ -12,10 +29,16 @@ body {
   font-family: "Space Grotesk", sans-serif;
   background-color: transparent !important;
   color: #f3f4f6;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
-/* Custom scrollbar styling */
+/* ====================================================================
+ * CUSTOM SCROLLBAR
+ * ====================================================================
+ * Lenis KHONG an scrollbar (van hien thi native scrollbar)
+ * Ta style scrollbar cho dep
+ * ==================================================================== */
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -33,7 +56,10 @@ body {
   background: #60a5fa;
 }
 
-/* Video Background Styling */
+/* ====================================================================
+ * VIDEO BACKGROUND
+ * ==================================================================== */
+
 .video-background {
   position: fixed;
   top: 0;
@@ -41,19 +67,17 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -2; /* Behind gradient overlay (-1) and all content */
+  z-index: -2;
 }
 
 @layer utilities {
-  /* Loading Screen Animations */
+  /* ====================================================================
+   * LOADING SCREEN ANIMATIONS
+   * ==================================================================== */
+
   @keyframes blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
   }
 
   .animate-blink {
@@ -61,19 +85,18 @@ body {
   }
 
   @keyframes loading {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(250%);
-    }
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(250%); }
   }
 
   .animate-loading-bar {
     animation: loading 0.8s ease infinite;
   }
 
-  /* Fade In Animations - cho Home section */
+  /* ====================================================================
+   * FADE IN ANIMATIONS
+   * ==================================================================== */
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -99,17 +122,14 @@ body {
     animation: fadeIn 1s ease-out 0.6s forwards;
   }
 
-  /* Gradient Animation - cho background */
+  /* ====================================================================
+   * GRADIENT ANIMATION
+   * ==================================================================== */
+
   @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 
   .animate-gradient {
@@ -117,15 +137,13 @@ body {
     animation: gradient 15s ease infinite;
   }
 
-  /* Pulse Animation - cho hover effects */
+  /* ====================================================================
+   * PULSE GLOW ANIMATION
+   * ==================================================================== */
+
   @keyframes pulse-glow {
-    0%,
-    100% {
-      box-shadow: 0 0 5px rgba(59, 130, 246, 0.2);
-    }
-    50% {
-      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-    }
+    0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
   }
 
   .animate-pulse-glow {
@@ -133,35 +151,164 @@ body {
   }
 }
 
-/* RevealOnScroll Animation */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
+/* ====================================================================
+ * GLASS MORPHISM
+ * ==================================================================== */
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Utility Classes */
 .glass {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* ====================================================================
+ * PARALLAX SECTION DIVIDERS
+ * ====================================================================
+ *
+ * Gradient dividers giua cac section
+ * Tao cam giac "chuyen canh" smooth giua cac phan
+ *
+ * ==================================================================== */
+
+section {
+  position: relative;
+}
+
+section::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.15),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Section cuoi khong can divider */
+section:last-of-type::after {
+  display: none;
+}
+
+/* ====================================================================
+ * GLOW SWEEP TEXT
+ * ====================================================================
+ *
+ * Hieu ung "anh sang luot qua" chu
+ *
+ * HOW:
+ *   1. Text co mau gray-400 (binh thuong)
+ *   2. 1 "vet sang" (gradient trang) chay tu trai sang phai
+ *   3. Dung background-clip: text + gradient di chuyen
+ *   4. Loop infinite, 4 giay moi lan
+ *
+ * KY THUAT:
+ *   - background-size: 200% -> gradient rong gap doi text
+ *   - Animate background-position tu 200% ve -200%
+ *   - Chi vung gradient trang moi hien sang -> "luot qua"
+ *
+ * ==================================================================== */
+
+@keyframes glowSweep {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.glow-sweep-text {
+  background: linear-gradient(
+    90deg,
+    #9ca3af 0%,         /* gray-400: mau binh thuong */
+    #9ca3af 35%,
+    #ffffff 50%,          /* Trang: vet sang */
+    #9ca3af 65%,
+    #9ca3af 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glowSweep 4s ease-in-out infinite;
+  animation-delay: 1.5s;  /* Cho text reveal xong moi chay glow */
+}
+
+/* ====================================================================
+ * ORBIT SPIN ANIMATIONS
+ * ====================================================================
+ *
+ * animate-spin-slow: Quay CW cham (60s/vong)
+ * animate-counter-spin-slow: Quay CCW cham -> de counter-rotate icons
+ *   (icon nam tren orbit dang quay CW, counter-rotate de icon giu thang)
+ *
+ * ==================================================================== */
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes counter-spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 60s linear infinite;
+}
+
+.animate-counter-spin-slow {
+  animation: counter-spin-slow 60s linear infinite;
+}
+
+/* ====================================================================
+ * SCROLL INDICATOR ANIMATIONS
+ * ==================================================================== */
+
+@keyframes scroll-dot {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.animate-scroll-dot {
+  animation: scroll-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+/* ====================================================================
+ * VIDEO BACKGROUND (duplicate selector - giu ca 2 de tuong thich)
+ * ==================================================================== */
+
 .video-background {
-  position: fixed; /* Hoặc absolute, nhưng fixed tốt hơn cho background toàn màn hình */
+  position: fixed;
   top: 0;
   left: 0;
   min-width: 100%;
   min-height: 100%;
   width: auto;
   height: auto;
-  z-index: -1 !important; /* Phải thấp hơn lớp gradient overlay (-1) và nội dung chính (0 trở lên) */
+  z-index: -1 !important;
   overflow: hidden;
-  object-fit: cover; /* Đảm bảo video lấp đầy không gian mà không bị kéo giãn */
+  object-fit: cover;
 }
