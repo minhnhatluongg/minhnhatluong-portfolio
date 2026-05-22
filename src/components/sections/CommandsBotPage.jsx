@@ -26,6 +26,7 @@ const PROFILE = {
 
 const CATEGORIES = [
   { id: "music", label: "Music", emoji: "🎵", color: "#1ed760" },
+  { id: "favorites", label: "Favorites", emoji: "⭐", color: "#e879f9" },
   { id: "coin", label: "Coin", emoji: "💰", color: "#ffa42b" },
   { id: "general", label: "General", emoji: "ℹ", color: "#539df5" },
 ];
@@ -57,6 +58,55 @@ const COMMANDS = [
       "Phien ban thong minh: hien thi 10 bai hat voi chi phi tung bai, so du hien tai, va goi y so bai ban co the phat neu coin sap het. Ban chon so bai muon phat qua menu, moi bai co dau OK (du coin) hoac BAN (vuot so du).",
     tags: ["smart", "voice", "youtube"],
     featured: true,
+  },
+  {
+    name: "/fav-add",
+    category: "favorites",
+    short: "Luu mot bai hat / nghe si yeu thich vao danh sach ca nhan",
+    cost: "Mien phi",
+    usage: "/fav-add label query [kind]",
+    examples: [
+      "/fav-add label:Hay Trao Cho Anh query:Son Tung MTP - Hay Trao Cho Anh",
+      "/fav-add label:Eminem Mix query:Eminem official kind:artist",
+      "/fav-add label:Lofi query:https://youtube.com/playlist?list=... kind:playlist",
+    ],
+    description:
+      "Luu yeu thich rieng cho moi user (toi da 25 muc / server). Tu dong nhan dien nguon (YouTube / Spotify / SoundCloud) tu query. Khong ton coin - chi la save de tai dung nhanh. Reply ephemeral (chi ban thay).",
+    tags: ["save", "personal", "ephemeral"],
+    featured: true,
+  },
+  {
+    name: "/fav-list",
+    category: "favorites",
+    short: "Xem danh sach yeu thich cua ban (kem ID)",
+    cost: "Mien phi",
+    usage: "/fav-list",
+    examples: ["/fav-list"],
+    description:
+      "Liet ke tat ca yeu thich da luu cua ban voi ID, kind emoji (🎵 track / 🎤 artist / 📀 playlist), va preview query. Dung ID hien thi de phat (/fav-play) hoac xoa (/fav-remove). Reply ephemeral - chi ban thay danh sach cua minh.",
+    tags: ["info", "ephemeral"],
+  },
+  {
+    name: "/fav-play",
+    category: "favorites",
+    short: "Phat nhanh 1 muc tu danh sach yeu thich",
+    cost: "Theo bai (giong /play)",
+    usage: "/fav-play id",
+    examples: ["/fav-play id:3", "/fav-play id:7"],
+    description:
+      "Load yeu thich theo ID (xem qua /fav-list), re-resolve qua YouTube/Spotify, tinh coin va enqueue nhu /play binh thuong. Re-resolve moi lan goi nen neu noi dung bi xoa thi ban se thay loi 'noi dung khong kha dung' - khong dung cache cu.",
+    tags: ["voice", "fast"],
+  },
+  {
+    name: "/fav-remove",
+    category: "favorites",
+    short: "Xoa 1 muc khoi danh sach yeu thich",
+    cost: "Mien phi",
+    usage: "/fav-remove id",
+    examples: ["/fav-remove id:3"],
+    description:
+      "Xoa muc co ID chi dinh khoi danh sach cua ban. Scope theo user+guild nen khong ai xoa duoc favorites cua nguoi khac. Neu ID khong ton tai trong list cua ban, nhan warning 'khong tim thay'.",
+    tags: ["manage"],
   },
   {
     name: "/queue",
@@ -657,7 +707,7 @@ function WelcomeBanner({ state, onDismiss }) {
 
 // px - wide enough to host profile card + 4 category chips on one row
 // without horizontal scrolling, and still fit command titles comfortably.
-const SIDEBAR_WIDTH = 400;
+const SIDEBAR_WIDTH = 560;
 
 export const CommandsBotPage = ({ onBack }) => {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -670,7 +720,11 @@ export const CommandsBotPage = ({ onBack }) => {
   const { state: visitState, isNewToday, dismissBanner } = useDailyVisit();
 
   useEffect(() => {
-    document.body.style.overflow = "auto";
+    // Khóa cứng viewport toàn hệ thống để trang này tự cuộn nội bộ
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.height = "100%";
+    document.body.style.height = "100%";
   }, []);
 
   const filtered = useMemo(() => {
@@ -797,7 +851,7 @@ export const CommandsBotPage = ({ onBack }) => {
 
   return (
     <div
-      className="bg-[#121212] text-white overflow-hidden flex flex-col"
+      className="fixed inset-0 z-[99999] bg-[#121212] text-white overflow-hidden flex flex-col"
       style={{ height: "100vh", width: "100vw" }}
     >
       {/* ===== Local styles for scrollbar (always visible) ===== */}

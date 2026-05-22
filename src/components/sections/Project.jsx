@@ -35,6 +35,14 @@ import { useParallax } from "../../hooks/useParallax";
 export const Projects = () => {
   const projectsData = [
     {
+      title: "Discord Music Bot",
+      description:
+        "A feature-rich Discord music bot with TypeScript and discord.js v14. Plays from YouTube/Spotify/SoundCloud, persistent coin economy on SQL Server, daily check-in streaks, smart /artist command. Interactive Spotify-themed commands reference page.",
+      technologies: ["TypeScript", "discord.js v14", "SQL Server", "Node.js"],
+      githubLink: "https://github.com/minhnhatluongg",
+      liveLink: "#/commands-bot",
+    },
+    {
       title: "Ecommerce-LaptopShop API",
       description:
         "Backend API for E-commerce Laptop Shop using Clean Architecture, CQRS pattern, MediatR, and Repository Pattern for scalable and maintainable code.",

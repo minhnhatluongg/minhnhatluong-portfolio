@@ -15,6 +15,25 @@ import { useLenis } from "./hooks/useLenis";
 
 const MOODS = ["default", "cyber", "ocean", "sunset", "matrix"];
 
+// ===== Hash-based routing =====
+// Uses window.location.hash (e.g. "#/commands-bot") so the site works on
+// ANY static host without server-side rewrites. The hash never reaches the
+// server, so even shared hosts that 404 unknown paths still load index.html
+// and let React decide what to render.
+//
+// We ALSO accept path-based "/commands-bot" for backwards compat — if a
+// host is configured for SPA fallback, the old URL still works.
+function readRoute() {
+  if (typeof window === "undefined") return "/";
+  const hash = window.location.hash || "";
+  if (hash.startsWith("#/")) {
+    const path = hash.slice(1);
+    return normalizePath(path);
+  }
+  // Fallback: read the real path (works on hosts with SPA rewrite).
+  return normalizePath(window.location.pathname);
+}
+
 function normalizePath(p) {
   if (!p) return "/";
   if (p.length > 1 && p.endsWith("/")) return p.slice(0, -1);
@@ -63,17 +82,19 @@ function PortfolioApp() {
 }
 
 function App() {
-  const [path, setPath] = useState(() =>
-    typeof window !== "undefined" ? normalizePath(window.location.pathname) : "/",
-  );
+  const [route, setRoute] = useState(() => readRoute());
 
   useEffect(() => {
-    const onPop = () => setPath(normalizePath(window.location.pathname));
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
+    const update = () => setRoute(readRoute());
+    window.addEventListener("popstate", update);
+    window.addEventListener("hashchange", update);
+    return () => {
+      window.removeEventListener("popstate", update);
+      window.removeEventListener("hashchange", update);
+    };
   }, []);
 
-  const isCommandsBot = path === "/commands-bot";
+  const isCommandsBot = route === "/commands-bot";
 
   // Lock html/body scroll & disable Lenis-induced overflow on /commands-bot.
   // The commands page renders a fixed full-viewport layout with its own
@@ -86,7 +107,6 @@ function App() {
     const prevBodyOverflow = body.style.overflow;
     const prevHtmlHeight = html.style.height;
     const prevBodyHeight = body.style.height;
-    // Strip Lenis classes so its overflow rules don't apply here.
     const hadLenis = html.classList.contains("lenis");
     const hadLenisSmooth = html.classList.contains("lenis-smooth");
     if (hadLenis) html.classList.remove("lenis");
@@ -106,8 +126,12 @@ function App() {
   }, [isCommandsBot]);
 
   const goBackToPortfolio = useCallback(() => {
-    window.history.pushState({}, "", "/");
-    setPath("/");
+    // Set hash back to home. We also push history so the back button works.
+    if (window.location.hash) {
+      window.history.pushState({}, "", window.location.pathname);
+    }
+    window.location.hash = "";
+    setRoute("/");
   }, []);
 
   if (isCommandsBot) {
