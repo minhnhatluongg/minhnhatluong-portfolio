@@ -21,6 +21,7 @@
 import { RevealOnScroll } from "../RevealOnScroll";
 import { SectionTitle } from "../ui/SectionTitle";
 import { SocialLink } from "../ui/SocialLink";
+import { RainbowButton, Magnetic, AnimatedTooltip } from "../ui/joly";
 import { FloatingShapes } from "../ParallaxLayer";
 import { useParallax } from "../../hooks/useParallax";
 
@@ -29,6 +30,7 @@ export const Contact = () => {
     {
       label: "Email",
       href: "mailto:cusocisme@gmail.com",
+      tooltip: "cusocisme@gmail.com",
       bgColor: "hover:bg-red-500/20",
       icon: (
         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -39,6 +41,7 @@ export const Contact = () => {
     {
       label: "GitHub",
       href: "https://github.com/minhnhatluongg",
+      tooltip: "@minhnhatluongg",
       bgColor: "hover:bg-gray-500/20",
       icon: (
         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -49,6 +52,7 @@ export const Contact = () => {
     {
       label: "Facebook",
       href: "https://facebook.com/minhnhatluongne",
+      tooltip: "minhnhatluongne",
       bgColor: "hover:bg-blue-600/20",
       icon: (
         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -59,6 +63,7 @@ export const Contact = () => {
     {
       label: "Instagram",
       href: "https://www.instagram.com/mnluonggg_/",
+      tooltip: "@mnluonggg_",
       bgColor: "hover:bg-pink-500/20",
       icon: (
         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -102,32 +107,40 @@ export const Contact = () => {
               distance={30}
               delay={index * 0.1}  // 0, 0.1, 0.2, 0.3
             >
-              <SocialLink
-                href={social.href}
-                icon={social.icon}
-                label={social.label}
-                bgColor={social.bgColor}
-              />
+              <AnimatedTooltip
+                content={social.tooltip}
+                placement="top"
+                animation="spring"
+                className="block w-full"
+              >
+                <Magnetic intensity={0.25} range={90}>
+                  <SocialLink
+                    href={social.href}
+                    icon={social.icon}
+                    label={social.label}
+                    bgColor={social.bgColor}
+                  />
+                </Magnetic>
+              </AnimatedTooltip>
             </RevealOnScroll>
           ))}
         </div>
 
-        {/* Email CTA - reveal cuoi cung */}
+        {/* Email CTA - Joly UI RainbowButton + Magnetic */}
         <RevealOnScroll direction="up" distance={20} delay={0.3}>
-          <div className="mt-12 text-center">
-            <a
-              href="mailto:cusocisme@gmail.com"
-              className="inline-flex items-center gap-2
-                bg-blue-500 text-white py-3 px-8 rounded-lg
-                font-medium transition-all duration-300
-                hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]
-                active:translate-y-0"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-              </svg>
-              Send Me an Email
-            </a>
+          <div className="mt-12 flex justify-center">
+            <Magnetic intensity={0.3} range={100}>
+              <RainbowButton
+                href="mailto:cusocisme@gmail.com"
+                duration={3}
+                innerClassName="px-8 py-3 text-base"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                </svg>
+                Send Me an Email
+              </RainbowButton>
+            </Magnetic>
           </div>
         </RevealOnScroll>
       </div>

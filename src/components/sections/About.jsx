@@ -23,12 +23,13 @@ import { SectionTitle } from "../ui/SectionTitle";
 import { Card } from "../ui/Card";
 import { SkillsGroup } from "../ui/SkillsGroup";
 import { InfoCard } from "../ui/InfoCard";
+import { HighlightText } from "../ui/joly";
 import { FloatingShapes } from "../ParallaxLayer";
 import { useParallax } from "../../hooks/useParallax";
 
 export const About = () => {
   const frontEndSkills = ["React", "JavaScript", "HTML", "CSS", "Tailwind CSS", "TypeScript"];
-  const backEndSkills = ["Node.js", ".NET", "MongoDB", "SQL Server", "Docker", "Git", "Postman"];
+  const backEndSkills = ["Node.js", ".NET", "MongoDB", "SQL Server", "Docker", "Git", "Postman", "Redis"];
 
   // Title parallax - nhe thoi
   const titleRef = useParallax(-20);
@@ -51,11 +52,20 @@ export const About = () => {
         <RevealOnScroll direction="up" distance={40}>
           <Card className="mb-8" hoverEffect={false}>
             <p className="text-gray-300 leading-relaxed text-lg">
-              Passionate full-stack developer with a knack for creating
-              efficient and scalable web applications. Skilled in JavaScript,
-              React, Node.js, and database management. Committed to continuous
-              learning and staying updated with the latest industry trends to
-              deliver cutting-edge solutions.
+              Passionate full-stack developer with a knack for creating{" "}
+              <HighlightText variant="underline" color="#38bdf8" animationDelay={0.3}>
+                efficient and scalable
+              </HighlightText>{" "}
+              web applications. Skilled in JavaScript, React, Node.js, and
+              database management. Committed to{" "}
+              <HighlightText variant="marker" color="#8b5cf6" animationDelay={0.8}>
+                continuous learning
+              </HighlightText>{" "}
+              and staying updated with the latest industry trends to deliver{" "}
+              <HighlightText variant="circle" color="#34d399" animationDelay={1.3}>
+                cutting-edge
+              </HighlightText>{" "}
+              solutions.
             </p>
           </Card>
         </RevealOnScroll>

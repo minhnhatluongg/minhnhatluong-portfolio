@@ -21,6 +21,7 @@
 
 import { RevealOnScroll } from "../RevealOnScroll";
 import { Button } from "../ui/Button";
+import { RainbowButton, NumberCounter, Magnetic } from "../ui/joly";
 import { FloatingShapes } from "../ParallaxLayer";
 import { useParallax } from "../../hooks/useParallax";
 import { SplitTextReveal, MagneticText, GlowText, RotatingRoles } from "../TextEffects";
@@ -177,30 +178,44 @@ export const Home = ({ mood = "default", onMoodChange }) => {
             </p>
           </div>
 
-          {/* BUTTONS */}
-          <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-more-delayed">
-            <Button href="#projects" variant="primary">
-              View Projects
-            </Button>
-            <Button href="#about" variant="outline">
-              Learn More
-            </Button>
+          {/* BUTTONS - Joly UI RainbowButton + Magnetic */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-more-delayed">
+            <Magnetic intensity={0.3} range={80}>
+              <RainbowButton
+                href="#projects"
+                duration={3}
+                innerClassName="px-8 py-3 text-base"
+              >
+                View Projects
+              </RainbowButton>
+            </Magnetic>
+            <Magnetic intensity={0.3} range={80}>
+              <Button href="#about" variant="outline">
+                Learn More
+              </Button>
+            </Magnetic>
           </div>
 
-          {/* QUICK STATS */}
+          {/* QUICK STATS - Joly UI NumberCounter dem tang dan khi vao viewport */}
           <div className="flex justify-center gap-6 md:gap-10 mt-8 animate-fade-in-more-delayed">
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-blue-400">4+</div>
+              <div className="text-2xl md:text-3xl font-bold text-blue-400">
+                <NumberCounter value={4} suffix="+" duration={2} />
+              </div>
               <div className="text-xs text-gray-500 uppercase tracking-wider">Projects</div>
             </div>
             <div className="w-px h-10 bg-gray-700/50" />
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-cyan-400">5+</div>
+              <div className="text-2xl md:text-3xl font-bold text-cyan-400">
+                <NumberCounter value={5} suffix="+" duration={2} delay={0.2} />
+              </div>
               <div className="text-xs text-gray-500 uppercase tracking-wider">Technologies</div>
             </div>
             <div className="w-px h-10 bg-gray-700/50" />
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-violet-400">1+</div>
+              <div className="text-2xl md:text-3xl font-bold text-violet-400">
+                <NumberCounter value={1} suffix="+" duration={2} delay={0.4} />
+              </div>
               <div className="text-xs text-gray-500 uppercase tracking-wider">Year Exp</div>
             </div>
           </div>
