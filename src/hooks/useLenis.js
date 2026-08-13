@@ -80,17 +80,20 @@ export function useLenis(options = {}) {
     // STEP 4: Tao RAF loop - Lenis can duoc goi moi frame
     // gsap.ticker chay ~60fps, ta "gat" Lenis vao ticker nay
     // thay vi tao requestAnimationFrame rieng (tranh 2 loop chay song song)
-    gsap.ticker.add((time) => {
+    // LUU Y: phai giu reference den callback de remove dung ham do -
+    // remove(lenis.raf) KHONG go duoc wrapper anonymous -> leak ticker.
+    const rafCallback = (time) => {
       lenis.raf(time * 1000); // GSAP ticker tra ve giay, Lenis can milliseconds
-    });
+    };
+    gsap.ticker.add(rafCallback);
 
     // STEP 5: Tat deltaRatio cua gsap de tranh conflict voi Lenis timing
     gsap.ticker.lagSmoothing(0);
 
     // STEP 6: Cleanup khi unmount
     return () => {
+      gsap.ticker.remove(rafCallback);
       lenis.destroy();
-      gsap.ticker.remove(lenis.raf);
       lenisRef.current = null;
     };
   }, []); // Empty deps = chi chay 1 lan

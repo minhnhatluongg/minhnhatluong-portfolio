@@ -1,21 +1,14 @@
 @import "tailwindcss";
 
 /* ====================================================================
- * LENIS SMOOTH SCROLL
+ * GLOBAL - Dark liquid-glass landing
  * ====================================================================
  *
- * Lenis THAY THE native scroll bang custom scroll.
- * Can bo html scroll-behavior: smooth vi Lenis tu xu ly.
- * Giu scroll-padding-top cho anchor links (Lenis ton trong no).
+ * - Nen den tuyet doi (bg-black) cho toan trang
+ * - Body font: Space Grotesk (load trong index.html)
+ * - Heading font: Instrument Serif -> .font-instrument
  *
- * html.lenis, html.lenis body:
- *   - height: auto -> de Lenis tinh toan chieu cao dung
- *   - Lenis tu dong them class "lenis" va "lenis-smooth" vao html
  * ==================================================================== */
-
-html {
-  scroll-padding-top: 80px; /* Offset cho fixed navbar */
-}
 
 html.lenis,
 html.lenis body {
@@ -27,16 +20,13 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Space Grotesk", sans-serif;
-  background-color: transparent !important;
+  background-color: #000;
   color: #f3f4f6;
   overflow-x: hidden;
 }
 
 /* ====================================================================
- * CUSTOM SCROLLBAR
- * ====================================================================
- * Lenis KHONG an scrollbar (van hien thi native scrollbar)
- * Ta style scrollbar cho dep
+ * CUSTOM SCROLLBAR - trung tinh, hop voi design monochrome
  * ==================================================================== */
 
 ::-webkit-scrollbar {
@@ -44,271 +34,108 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3b82f6;
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #60a5fa;
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* ====================================================================
- * VIDEO BACKGROUND
+ * INSTRUMENT SERIF helper
  * ==================================================================== */
 
-.video-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-}
-
-@layer utilities {
-  /* ====================================================================
-   * LOADING SCREEN ANIMATIONS
-   * ==================================================================== */
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-
-  .animate-blink {
-    animation: blink 0.8s step-end infinite;
-  }
-
-  @keyframes loading {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(250%); }
-  }
-
-  .animate-loading-bar {
-    animation: loading 0.8s ease infinite;
-  }
-
-  /* ====================================================================
-   * FADE IN ANIMATIONS
-   * ==================================================================== */
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 1s ease-out forwards;
-  }
-
-  .animate-fade-in-delayed {
-    opacity: 0;
-    animation: fadeIn 1s ease-out 0.3s forwards;
-  }
-
-  .animate-fade-in-more-delayed {
-    opacity: 0;
-    animation: fadeIn 1s ease-out 0.6s forwards;
-  }
-
-  /* ====================================================================
-   * GRADIENT ANIMATION
-   * ==================================================================== */
-
-  @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient 15s ease infinite;
-  }
-
-  /* ====================================================================
-   * PULSE GLOW ANIMATION
-   * ==================================================================== */
-
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.2); }
-    50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-  }
-
-  .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
-  }
+.font-instrument {
+  font-family: "Instrument Serif", serif;
 }
 
 /* ====================================================================
- * GLASS MORPHISM
- * ==================================================================== */
-
-.glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* ====================================================================
- * PARALLAX SECTION DIVIDERS
+ * VIDEO SHARPEN + FILM GRAIN
  * ====================================================================
  *
- * Gradient dividers giua cac section
- * Tao cam giac "chuyen canh" smooth giua cac phan
+ * Video nen (1756x1176) bi upscale len man hinh lon -> mem anh.
+ * CSS khong tao them chi tiet that duoc, nhung tang do net CAM NHAN:
+ *
+ * 1. .video-sharpen: unsharp mask (SVG feConvolveMatrix, def inline
+ *    trong Hero.jsx) + contrast/saturate nhe. QUAN TRONG: filter phai
+ *    co color-interpolation-filters="sRGB" - mac dinh linearRGB se
+ *    sap gamma vung toi (da A/B test). Chi bat convolve tu md+
+ *    (mobile it bi upscale, tiet kiem GPU).
+ *
+ * 2. .grain-overlay: lop noise mong (SVG feTurbulence data-URI,
+ *    mix-blend overlay ~7%) - "film grain" che vet upscale,
+ *    mat nguoi doc grain la "chi tiet" -> video trong sac net hon.
+ *
+ * Muon net THAT su: thay bang file video do phan giai cao hon
+ * (upscale offline roi self-host trong /public).
  *
  * ==================================================================== */
 
-section {
-  position: relative;
+.video-sharpen {
+  filter: contrast(1.06) saturate(1.12);
 }
 
-section::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(59, 130, 246, 0.15),
-    transparent
-  );
-  pointer-events: none;
+@media (min-width: 768px) {
+  .video-sharpen {
+    filter: url(#video-sharpen-filter) contrast(1.04) saturate(1.1);
+  }
 }
 
-/* Section cuoi khong can divider */
-section:last-of-type::after {
-  display: none;
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  mix-blend-mode: overlay;
+  opacity: 0.07;
 }
 
 /* ====================================================================
- * GLOW SWEEP TEXT
+ * LIQUID GLASS
  * ====================================================================
  *
- * Hieu ung "anh sang luot qua" chu
+ * Class dung cho MOI element kinh mo: navbar pill, buttons, cards,
+ * email input, social icons...
  *
- * HOW:
- *   1. Text co mau gray-400 (binh thuong)
- *   2. 1 "vet sang" (gradient trang) chay tu trai sang phai
- *   3. Dung background-clip: text + gradient di chuyen
- *   4. Loop infinite, 4 giay moi lan
- *
- * KY THUAT:
- *   - background-size: 200% -> gradient rong gap doi text
- *   - Animate background-position tu 200% ve -200%
- *   - Chi vung gradient trang moi hien sang -> "luot qua"
+ * ::before tao gradient border mong (1.4px) sang o tren/duoi,
+ * trong suot o giua - ky thuat mask-composite: exclude de chi
+ * hien phan "vien" cua padding.
  *
  * ==================================================================== */
 
-@keyframes glowSweep {
-  0% {
-    background-position: 200% center;
+@layer components {
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
   }
-  100% {
-    background-position: -200% center;
+
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
   }
-}
-
-.glow-sweep-text {
-  background: linear-gradient(
-    90deg,
-    #9ca3af 0%,         /* gray-400: mau binh thuong */
-    #9ca3af 35%,
-    #ffffff 50%,          /* Trang: vet sang */
-    #9ca3af 65%,
-    #9ca3af 100%
-  );
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: glowSweep 4s ease-in-out infinite;
-  animation-delay: 1.5s;  /* Cho text reveal xong moi chay glow */
-}
-
-/* ====================================================================
- * ORBIT SPIN ANIMATIONS
- * ====================================================================
- *
- * animate-spin-slow: Quay CW cham (60s/vong)
- * animate-counter-spin-slow: Quay CCW cham -> de counter-rotate icons
- *   (icon nam tren orbit dang quay CW, counter-rotate de icon giu thang)
- *
- * ==================================================================== */
-
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes counter-spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-
-.animate-spin-slow {
-  animation: spin-slow 60s linear infinite;
-}
-
-.animate-counter-spin-slow {
-  animation: counter-spin-slow 60s linear infinite;
-}
-
-/* ====================================================================
- * SCROLL INDICATOR ANIMATIONS
- * ==================================================================== */
-
-@keyframes scroll-dot {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-}
-
-.animate-scroll-dot {
-  animation: scroll-dot 1.5s ease-in-out infinite;
-}
-
-@keyframes bounce-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
-}
-
-.animate-bounce-slow {
-  animation: bounce-slow 2s ease-in-out infinite;
-}
-
-/* ====================================================================
- * VIDEO BACKGROUND (duplicate selector - giu ca 2 de tuong thich)
- * ==================================================================== */
-
-.video-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -1 !important;
-  overflow: hidden;
-  object-fit: cover;
 }

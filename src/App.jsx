@@ -1,19 +1,14 @@
-import "./App.css";
-import { LoadingScreen } from "./components/LoadingScreen";
 import "./index.css";
-import { Navbar } from "./components/NavBar";
 import { useState, useCallback, useEffect } from "react";
-import { MobileMenu } from "./components/MobileMenu";
-import { Home } from "./components/sections/Home";
-import { About } from "./components/sections/About";
-import { Projects } from "./components/sections/Project";
-import { Contact } from "./components/sections/Contact";
+import { Hero } from "./components/sections/Hero";
+import { AboutSection } from "./components/sections/AboutSection";
+import { FeaturedVideoSection } from "./components/sections/FeaturedVideoSection";
+import { PhilosophySection } from "./components/sections/PhilosophySection";
+import { ServicesSection } from "./components/sections/ServicesSection";
+import { ProjectsSection } from "./components/sections/ProjectsSection";
+import { ContactSection } from "./components/sections/ContactSection";
 import { CommandsBotPage } from "./components/sections/CommandsBotPage";
-import { BackgroundVideo } from "./components/BackgroundVideo";
-import { ScrollProgress } from "./components/ScrollProgress";
 import { useLenis } from "./hooks/useLenis";
-
-const MOODS = ["default", "cyber", "ocean", "sunset", "matrix"];
 
 // ===== Hash-based routing =====
 // Uses window.location.hash (e.g. "#/commands-bot") so the site works on
@@ -40,12 +35,8 @@ function normalizePath(p) {
   return p;
 }
 
-// Portfolio (main) tree - uses Lenis smooth scroll
+// Portfolio (main) tree - dark liquid-glass landing, Lenis smooth scroll
 function PortfolioApp() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [moodIndex, setMoodIndex] = useState(0);
-
   useLenis({
     lerp: 0.1,
     duration: 1.2,
@@ -53,31 +44,16 @@ function PortfolioApp() {
     smoothTouch: false,
   });
 
-  const cycleMood = useCallback(() => {
-    setMoodIndex((prev) => (prev + 1) % MOODS.length);
-  }, []);
-
-  const currentMood = MOODS[moodIndex];
-
   return (
-    <>
-      {!isLoaded && <LoadingScreen onComplete={() => setIsLoaded(true)} />}
-      <BackgroundVideo mood={currentMood} />
-      {isLoaded && <ScrollProgress />}
-      <div
-        className={`min-h-screen transition-opacity duration-700 ${
-          isLoaded ? "opacity-100" : "opacity-0"
-        } relative`}
-        style={{ backgroundColor: "transparent" }}
-      >
-        <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-        <MobileMenu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-        <Home mood={currentMood} onMoodChange={cycleMood} />
-        <About />
-        <Projects />
-        <Contact />
-      </div>
-    </>
+    <main id="home" className="min-h-screen bg-black">
+      <Hero />
+      <AboutSection />
+      <FeaturedVideoSection />
+      <PhilosophySection />
+      <ServicesSection />
+      <ProjectsSection />
+      <ContactSection />
+    </main>
   );
 }
 
