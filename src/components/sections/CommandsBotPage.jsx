@@ -719,13 +719,10 @@ export const CommandsBotPage = ({ onBack }) => {
 
   const { state: visitState, isNewToday, dismissBanner } = useDailyVisit();
 
-  useEffect(() => {
-    // Khóa cứng viewport toàn hệ thống để trang này tự cuộn nội bộ
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.height = "100%";
-    document.body.style.height = "100%";
-  }, []);
+  // LUU Y: KHONG khoa viewport o day. App.jsx da lock/restore html/body
+  // overflow khi vao/ra route nay. Neu lock them lan nua o child effect
+  // (chay TRUOC parent effect), App se "chup" gia tri overflow=hidden
+  // va restore sai -> quay ve portfolio khong the scroll duoc nua.
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -950,7 +947,9 @@ export const CommandsBotPage = ({ onBack }) => {
             />
             <aside
               className="md:hidden fixed top-14 left-0 bottom-0 z-50 border-r border-[#181818]"
-              style={{ width: SIDEBAR_WIDTH + "px" }}
+              // Cap theo viewport: 560px tren phone se che het man hinh,
+              // khong con backdrop de tap-dismiss. min() giu lai 15% backdrop.
+              style={{ width: `min(${SIDEBAR_WIDTH}px, 85vw)` }}
             >
               {sidebarContent}
             </aside>
